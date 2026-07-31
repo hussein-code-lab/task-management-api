@@ -1,58 +1,413 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task Management System API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful Task Management API built with Laravel following clean architecture principles and Laravel best practices.
 
-## About Laravel
+The system allows authenticated users to manage their projects and tasks with proper authorization, validation, API resources, background jobs, and automated testing.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Authentication
 
-## Learning Laravel
+* User registration
+* User login
+* User logout
+* API authentication using Laravel Sanctum
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Projects Management
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Each user can manage their own projects.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Features:
 
-## Agentic Development
+* Create project
+* List user's projects
+* View project details
+* Update project
+* Delete project (Soft Delete)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Project fields:
 
-```bash
-composer require laravel/boost --dev
+* Name
+* Description
+* Status:
 
-php artisan boost:install
+  * Active
+  * Completed
+  * Archived
+
+### Tasks Management
+
+Each project contains multiple tasks.
+
+Features:
+
+* Create task
+* List project tasks
+* View task
+* Update task
+* Delete task (Soft Delete)
+
+Task fields:
+
+* Title
+
+* Description
+
+* Priority:
+
+  * Low
+  * Medium
+  * High
+
+* Status:
+
+  * Todo
+  * In Progress
+  * Done
+
+* Due Date
+
+Additional capabilities:
+
+* Filter by status
+* Filter by priority
+* Search by title
+* Pagination
+
+---
+
+# 📊 Dashboard
+
+The dashboard endpoint provides project and task statistics for the authenticated user.
+
+Available metrics:
+
+* Total Projects
+* Active Projects
+* Total Tasks
+* Completed Tasks
+* Pending Tasks
+* Overdue Tasks
+
+---
+
+# ⚙️ Technical Stack
+
+* Laravel
+* PHP
+* MySQL
+* Laravel Sanctum
+* Eloquent ORM
+* REST API
+* PHPUnit / Pest Feature Tests
+
+---
+
+# 🏗️ Architecture
+
+The project follows a clean and maintainable structure:
+
+```
+app
+├── Http
+│   ├── Controllers
+│   ├── Requests
+│   └── Resources
+│
+├── Services
+│
+├── Policies
+│
+├── Enums
+│
+├── Jobs
+│
+└── Notifications
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Implemented concepts:
 
-## Contributing
+* Service Layer
+* Form Request Validation
+* API Resource Transformation
+* Authorization Policies
+* Enum-based statuses
+* Eloquent Relationships
+* Soft Deletes
+* Queue Jobs
+* Database Notifications
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+# 🔐 Authorization
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Users can only access their own data.
 
-## Security Vulnerabilities
+Implemented authorization rules:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* Users can manage only their projects.
+* Users can access tasks belonging to their own projects.
+* Unauthorized access returns proper HTTP responses.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 🔔 Queue & Notifications
+
+The system includes background processing for overdue tasks.
+
+Flow:
+
+```
+Scheduler
+    ↓
+Command
+    ↓
+Queue Job
+    ↓
+Database Notification
+```
+
+When a task becomes overdue:
+
+* The system detects overdue tasks.
+* A queued job is dispatched.
+* The user receives a notification.
+* Duplicate notifications are prevented.
+
+---
+
+# 🧪 Testing
+
+The project includes automated Feature Tests covering:
+
+* Authentication
+* Project CRUD
+* Task CRUD
+* Authorization
+* Filtering
+* Searching
+* Dashboard functionality
+* Queue job dispatching
+* Notifications
+
+Current test coverage:
+
+```
+21 Tests
+83 Assertions
+```
+
+Run tests:
+
+```bash
+php artisan test
+```
+
+---
+
+# 📦 Installation
+
+## Requirements
+
+Make sure you have:
+
+* PHP 8.2+
+* Composer
+* MySQL
+* Laravel requirements installed
+
+---
+
+## Clone Repository
+
+```bash
+git clone <repository-url>
+
+cd task-management
+```
+
+---
+
+## Install Dependencies
+
+```bash
+composer install
+```
+
+---
+
+## Environment Setup
+
+Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## Database Configuration
+
+Update your `.env` file:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_management
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## Run Migrations
+
+```bash
+php artisan migrate
+```
+
+---
+
+## Seed Sample Data
+
+```bash
+php artisan db:seed
+```
+
+Or:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+---
+
+## Run Application
+
+```bash
+php artisan serve
+```
+
+Application will be available at:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# 📚 API Documentation
+
+Base URL:
+
+```
+/api/v1
+```
+
+Authentication:
+
+All protected endpoints require:
+
+```
+Authorization: Bearer {token}
+Accept: application/json
+```
+
+---
+
+# API Endpoints
+
+## Authentication
+
+| Method | Endpoint       | Description   |
+| ------ | -------------- | ------------- |
+| POST   | /auth/register | Register user |
+| POST   | /auth/login    | Login user    |
+| POST   | /auth/logout   | Logout user   |
+
+---
+
+## Projects
+
+| Method | Endpoint       | Description    |
+| ------ | -------------- | -------------- |
+| GET    | /projects      | List projects  |
+| POST   | /projects      | Create project |
+| GET    | /projects/{id} | View project   |
+| PUT    | /projects/{id} | Update project |
+| DELETE | /projects/{id} | Delete project |
+
+---
+
+## Tasks
+
+| Method | Endpoint                         | Description |
+| ------ | -------------------------------- | ----------- |
+| GET    | /projects/{project}/tasks        | List tasks  |
+| POST   | /projects/{project}/tasks        | Create task |
+| GET    | /projects/{project}/tasks/{task} | View task   |
+| PUT    | /projects/{project}/tasks/{task} | Update task |
+| DELETE | /projects/{project}/tasks/{task} | Delete task |
+
+Filtering example:
+
+```
+/projects/1/tasks?status=done
+```
+
+```
+/projects/1/tasks?priority=high
+```
+
+Search example:
+
+```
+/projects/1/tasks?search=meeting
+```
+
+---
+
+## Dashboard
+
+| Method | Endpoint   | Description     |
+| ------ | ---------- | --------------- |
+| GET    | /dashboard | User statistics |
+
+---
+
+# 📌 Postman Collection
+
+A complete Postman collection is included containing:
+
+* Authentication requests
+* Projects requests
+* Tasks requests
+* Dashboard request
+
+---
+
+# 👨‍💻 Development Notes
+
+The project was built with focus on:
+
+* Clean code
+* Separation of responsibilities
+* Maintainable architecture
+* Proper API responses
+* Secure authorization
+* Automated testing
+
+---
+
+# License
+
+This project is for assessment and demonstration purposes.
