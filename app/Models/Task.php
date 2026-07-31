@@ -22,6 +22,7 @@ class Task extends Model
         'priority',
         'status',
         'due_date',
+        'overdue_notified_at',
     ];
 
     protected function casts(): array
@@ -30,6 +31,7 @@ class Task extends Model
             'priority' => TaskPriority::class,
             'status' => TaskStatus::class,
             'due_date' => 'date',
+            'overdue_notified_at' => 'datetime',
         ];
     }
 
