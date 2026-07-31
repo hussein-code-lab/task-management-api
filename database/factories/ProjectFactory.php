@@ -26,7 +26,7 @@ class ProjectFactory extends Factory
 
             'description' => fake()->sentence(),
 
-            'status' => ProjectStatus::ACTIVE,
+            'status' => fake()->randomElement(ProjectStatus::cases()),
         ];
 
     }

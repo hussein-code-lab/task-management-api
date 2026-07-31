@@ -14,22 +14,22 @@ class DashboardService
             'total_projects' => $user->projects()->count(),
 
             'active_projects' => $user->projects()
-                ->where('status', ProjectStatus::ACTIVE)
+                ->where('projects.status', ProjectStatus::ACTIVE)
                 ->count(),
 
             'total_tasks' => $user->tasks()->count(),
 
             'completed_tasks' => $user->tasks()
-                ->where('status', TaskStatus::DONE)
+                ->where('tasks.status', TaskStatus::DONE)
                 ->count(),
 
             'pending_tasks' => $user->tasks()
-                ->where('status', '!=', TaskStatus::DONE)
+                ->where('tasks.status', '!=', TaskStatus::DONE)
                 ->count(),
 
             'overdue_tasks' => $user->tasks()
-                ->whereDate('due_date', '<', now())
-                ->where('status', '!=', TaskStatus::DONE)
+                ->whereDate('tasks.due_date', '<', now())
+                ->where('tasks.status', '!=', TaskStatus::DONE)
                 ->count(),
         ];
     }
